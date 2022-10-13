@@ -47,6 +47,9 @@
           "extractLicenses": false,
           "sourceMap": true,
           "namedChunks": true
+        },
+        "bad-option": {
+          "bad": "option"
         }
       },
       "defaultConfiguration": "production"
@@ -81,6 +84,76 @@
       "options": {
         "jestConfig": "apps/app/jest.config.ts",
         "passWithNoTests": true
+      }
+    },
+    "run-commands-passes": {
+      "executor": "@angular-devkit/architect:allOf",
+      "options": {
+        "targets": [
+          {
+            "target": "app:sleep-and-echo-passes"
+          }
+        ]
+      },
+      "outputs": ["{options.outputFile}"]
+    },
+    "run-commands-fails": {
+      "executor": "@angular-devkit/architect:allOf",
+      "options": {
+        "targets": [
+          {
+            "target": "app:sleep-and-echo-fails-bad-config"
+          }
+        ]
+      },
+      "outputs": ["{options.outputFile}"]
+    },
+    "sleep-and-echo-passes": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "sleep 1 && echo 'FINISHED'",
+          "echo 'READY'"
+        ],
+        "readyWhen": "FINISHED",
+        "parallel": true
+      }
+    },
+    "sleep-and-echo-fails-bad-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "sleep 1 && echo 'FINISHED'",
+          "echo 'READY'"
+        ],
+        "readyWhen": "FINISHED",
+        "parallel": false
+      }
+    },
+    "build-dev-and-production": {
+      "executor": "@angular-devkit/architect:allOf",
+      "options": {
+        "targets": [
+          {
+            "target": "app:build:development"
+          },
+          {
+            "target": "app:build:production"
+          }
+        ]
+      }
+    },
+    "build-dev-and-bad-options": {
+      "executor": "@angular-devkit/architect:allOf",
+      "options": {
+        "targets": [
+          {
+            "target": "app:build:development"
+          },
+          {
+            "target": "app:build:bad-option"
+          }
+        ]
       }
     }
   },
