@@ -1,0 +1,5 @@
+{
+  "name": "throws-builder",
+  "version": "0.0.1",
+  "builders": "src/lib/builders/builders.json"
+}

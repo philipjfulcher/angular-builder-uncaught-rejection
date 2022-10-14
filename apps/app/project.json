@@ -54,81 +54,60 @@
       },
       "defaultConfiguration": "production"
     },
-    "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
-      "configurations": {
-        "production": {
-          "browserTarget": "app:build:production"
-        },
-        "development": {
-          "browserTarget": "app:build:development"
-        }
-      },
-      "defaultConfiguration": "development"
-    },
-    "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
-      "options": {
-        "browserTarget": "app:build"
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["apps/app/**/*.ts", "apps/app/**/*.html"]
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-      "options": {
-        "jestConfig": "apps/app/jest.config.ts",
-        "passWithNoTests": true
-      }
+    "throws": {
+      "executor": "./dist/libs/throws:throws"
     },
     "run-commands-passes": {
-      "executor": "@angular-devkit/architect:allOf",
-      "options": {
-        "targets": [
-          {
-            "target": "app:sleep-and-echo-passes"
-          }
-        ]
-      },
-      "outputs": ["{options.outputFile}"]
-    },
-    "run-commands-fails": {
-      "executor": "@angular-devkit/architect:allOf",
-      "options": {
-        "targets": [
-          {
-            "target": "app:sleep-and-echo-fails-bad-config"
-          }
-        ]
-      },
-      "outputs": ["{options.outputFile}"]
-    },
-    "sleep-and-echo-passes": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "sleep 1 && echo 'FINISHED'",
-          "echo 'READY'"
-        ],
+        "commands": ["sleep 1 && echo 'FINISHED'", "echo 'READY'"],
         "readyWhen": "FINISHED",
         "parallel": true
       }
     },
-    "sleep-and-echo-fails-bad-config": {
+    "run-commands-fails": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "sleep 1 && echo 'FINISHED'",
-          "echo 'READY'"
-        ],
+        "commands": ["sleep 1 && echo 'FINISHED'", "echo 'READY'"],
         "readyWhen": "FINISHED",
         "parallel": false
       }
+    },
+
+    "allof-throws": {
+      "executor": "@angular-devkit/architect:allOf",
+      "options": {
+        "targets": [
+          {
+            "target": "app:build:development"
+          },
+          {
+            "target": "app:throws"
+          }
+        ]
+      }
+    },
+    "allof-run-commands-passes": {
+      "executor": "@angular-devkit/architect:allOf",
+      "options": {
+        "targets": [
+          {
+            "target": "app:run-commands-passes"
+          }
+        ]
+      },
+      "outputs": ["{options.outputFile}"]
+    },
+    "allof-run-commands-fails": {
+      "executor": "@angular-devkit/architect:allOf",
+      "options": {
+        "targets": [
+          {
+            "target": "app:run-commands-fails"
+          }
+        ]
+      },
+      "outputs": ["{options.outputFile}"]
     },
     "build-dev-and-production": {
       "executor": "@angular-devkit/architect:allOf",
